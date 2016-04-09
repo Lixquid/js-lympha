@@ -1,0 +1,56 @@
+{
+	// Input the credentials for your discord account.
+	// If token is present, that is used, otherwise email and password
+	// is used to login.
+	"email": "ACCOUNT_EMAIL",
+	"password": "ACCOUNT_PASSWORD",
+	// -- OR --
+	"token": "ACCOUNT_TOKEN",
+
+	// Specify the shorthand prefix for mentioning Lympha.
+	// A value of null will disable shorthand referencing.
+	"commandPrefix": ";",
+
+	// Specify access levels for users.
+	// Access levels:
+	// 0: All (default)
+	// 10: Trusted
+	// 50: Moderator
+	// 75: Administrator
+	// 99: Developer
+	"access": {
+		// "0123456789": 99
+	},
+
+	// An error master is the account @mentioned whenever an error is
+	// encountered.
+	"errorMaster": "ID",
+
+	// A list of disabled plugins.
+	// Use the plugin's first (or only) command.
+	"disabledPlugins": [
+		// "pluginCommand"
+	],
+
+	// User IDs that Lympha will never respond to.
+	"ignore": [
+		// "0123456789"
+	],
+
+	// Specific rules for servers.
+	// Specify the server ID, then:
+	// "roles": A list of roles for Lympha to ignore.
+	//     If a User has any of these roles, they will be ignored.
+	// "channels": A list of channels to ignore.
+	"ignoreRules": [
+		"serverID01234": {
+			"roles": [
+				"bot role"
+			],
+			"channels": [
+				"bot channel"
+			]
+		}
+	]
+
+}
