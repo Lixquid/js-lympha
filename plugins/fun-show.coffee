@@ -42,6 +42,14 @@ images = {
 		"http://i.imgur.com/gaaEWQ9.png"
 		"http://i.imgur.com/cFV5GyB.gif"
 	]
+	operator: [
+		"http://i.imgur.com/X4PdRsX.jpg"
+		"http://i.imgur.com/uKKqxf9.jpg"
+		"http://i.imgur.com/w1sQqh1.jpg"
+		"http://i.imgur.com/qWEdZFL.jpg"
+		"http://i.imgur.com/s5FSFRU.jpg"
+		"http://i.imgur.com/0dAbuOJ.jpg"
+	]
 }
 
 lympha.registerPlugin
