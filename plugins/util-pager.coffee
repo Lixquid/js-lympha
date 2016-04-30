@@ -94,9 +94,9 @@ lympha.registerPlugin
 		# Deactivate pager for 45 seconds after talking
 		pingTimeout[ msg.sender.id.toString() ] = now + 45 * 1000
 		@dbEach( """
-			SELECT *
+			SELECT pager.owner, pager.phrase, pager_settings.notifytype
 			FROM pager
-				INNER JOIN pager_settings
+				LEFT JOIN pager_settings
 				ON
 					pager.owner = pager_settings.owner
 		""" ).then( ( row ) =>
@@ -108,9 +108,11 @@ lympha.registerPlugin
 				# only ping every 30 seconds
 				pingTimeout[ row.owner ] = now + 30 * 1000
 
-				if row.notifytype == 0 or row.notifytype == 2
+				notifytype = row.notifytype ? 0
+
+				if notifytype == 0 or notifytype == 2
 					@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
-				if row.notifytype == 1 or row.notifytype == 2
+				if notifytype == 1 or notifytype == 2
 					@sendMessage( row.owner, """
 						:exclamation:: #{msg.channel.server.name}, \
 						##{msg.channel.name}
