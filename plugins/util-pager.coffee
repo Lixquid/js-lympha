@@ -102,7 +102,7 @@ lympha.registerPlugin
 		""" ).then( ( row ) =>
 			if row.owner == msg.sender.id
 				return
-			if pingTimeout[ row.owner ]? > now
+			if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
 				return
 			if txt.indexOf( row.phrase ) > -1
 				# only ping every 30 seconds
