@@ -93,33 +93,37 @@ lympha.registerPlugin
 
 		# Deactivate pager for 45 seconds after talking
 		pingTimeout[ msg.sender.id.toString() ] = now + 45 * 1000
-		@dbEach( """
+		@dbAll( """
 			SELECT pager.owner, pager.phrase, pager_settings.notifytype
 			FROM pager
 				LEFT JOIN pager_settings
 				ON
 					pager.owner = pager_settings.owner
-		""" ).then( ( row ) =>
-			if row.owner == msg.sender.id
-				return
-			if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
-				return
-			if txt.indexOf( row.phrase ) > -1
-				# only ping every 30 seconds
-				pingTimeout[ row.owner ] = now + 30 * 1000
+		""" ).then( ( rows ) =>
+			for row in rows
+				if row.owner == msg.sender.id
+					return
+				if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
+					return
+				if txt.indexOf( row.phrase ) > -1
+					# only ping every 30 seconds
+					pingTimeout[ row.owner ] = Math.max(
+						now + 30 * 1000,
+						pingTimeout[ row.owner ]
+					)
 
-				notifytype = row.notifytype ? 0
+					notifytype = row.notifytype ? 0
 
-				if notifytype == 0 or notifytype == 2
-					@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
-				if notifytype == 1 or notifytype == 2
-					@sendMessage( row.owner, """
-						:exclamation:: #{msg.channel.server.name}, \
-						##{msg.channel.name}
-						**#{msg.sender}**: #{msg.content}
-						https://discordapp.com/channels/#{msg.channel.server.id}/\
-						#{msg.channel.id}
-					""" )
+					if notifytype == 0 or notifytype == 2
+						@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
+					if notifytype == 1 or notifytype == 2
+						@sendMessage( row.owner, """
+							:exclamation:: #{msg.channel.server.name}, \
+							##{msg.channel.name}
+							**#{msg.sender}**: #{msg.content}
+							https://discordapp.com/channels/#{msg.channel.server.id}/\
+							#{msg.channel.id}
+						""" )
 		).catch( ( err ) -> console.error( err ) )
 
 lympha.registerPlugin
