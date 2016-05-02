@@ -112,7 +112,7 @@ lympha.registerPlugin
 						pingTimeout[ row.owner ]
 					)
 
-					notifytype = row.notifytype ? 0
+					notifytype = row.notifytype ? 1
 
 					if notifytype == 0 or notifytype == 2
 						@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
