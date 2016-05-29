@@ -107,8 +107,8 @@ lympha.registerPlugin
 			for row in rows
 				if row.owner == msg.sender.id
 					continue
-				# if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
-				# 	continue
+				if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
+					continue
 				if txt.indexOf( row.phrase ) < 0
 					continue
 				valid = false
