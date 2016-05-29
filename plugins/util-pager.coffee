@@ -88,6 +88,10 @@ lympha.registerPlugin
 				""" )
 		)
 	onMessage: ( msg ) ->
+		# Ignore PMs
+		if msg.channel.isPrivate
+			return
+
 		now = (new Date).getTime()
 		txt = msg.content.toLowerCase()
 
@@ -103,27 +107,35 @@ lympha.registerPlugin
 			for row in rows
 				if row.owner == msg.sender.id
 					continue
-				if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
+				# if pingTimeout[ row.owner ]? and pingTimeout[ row.owner ] > now
+				# 	continue
+				if txt.indexOf( row.phrase ) < 0
 					continue
-				if txt.indexOf( row.phrase ) > -1
-					# only ping every 30 seconds
-					pingTimeout[ row.owner ] = Math.max(
-						now + 30 * 1000,
-						pingTimeout[ row.owner ]
-					)
+				valid = false
+				for member in msg.channel.server.members
+					if member.id == row.owner
+						valid = true
+						break
+				if not valid
+					break
+				# only ping every 30 seconds
+				pingTimeout[ row.owner ] = Math.max(
+					now + 30 * 1000,
+					pingTimeout[ row.owner ]
+				)
 
-					notifytype = row.notifytype ? 1
+				notifytype = row.notifytype ? 1
 
-					if notifytype == 0 or notifytype == 2
-						@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
-					if notifytype == 1 or notifytype == 2
-						@sendMessage( row.owner, """
-							:exclamation:: #{msg.channel.server.name}, \
-							##{msg.channel.name}
-							**#{msg.sender}**: #{msg.content}
-							https://discordapp.com/channels/#{msg.channel.server.id}/\
-							#{msg.channel.id}
-						""" )
+				if notifytype == 0 or notifytype == 2
+					@sendMessage( msg.channel.id, "Pinging <@#{row.owner}>!" )
+				if notifytype == 1 or notifytype == 2
+					@sendMessage( row.owner, """
+						:exclamation:: #{msg.channel.server.name}, \
+						##{msg.channel.name}
+						**#{msg.sender}**: #{msg.content}
+						https://discordapp.com/channels/#{msg.channel.server.id}/\
+						#{msg.channel.id}
+					""" )
 		).catch( ( err ) -> console.error( err ) )
 
 lympha.registerPlugin
