@@ -246,6 +246,10 @@ lympha.on "message", ( msg ) ->
 	loop
 		# DM, respond as is
 		if msg.channel.isPrivate
+			# If the command prefix is there, strip it
+			# nice one falco
+			if @config.commandPrefix and txt.indexOf( @config.commandPrefix ) == 0
+				txt = txt.substr( @config.commandPrefix.length ).trimLeft()
 			break
 		# @Mentioned, strip mention
 		if txt.indexOf( "<@#{@user.id}>" ) == 0
